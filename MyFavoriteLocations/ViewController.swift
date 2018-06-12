@@ -11,7 +11,7 @@ import Firebase
 
 class ViewController: UIViewController {
     
-    @IBOutlet weak var TitleLabel: UILabel!
+    @IBOutlet weak var titleLabel: UILabel!
     
     @IBOutlet weak var actionSelector: UISegmentedControl!
     
@@ -21,7 +21,7 @@ class ViewController: UIViewController {
     
     @IBOutlet weak var passwordTextField: UITextField!
     
-    @IBOutlet weak var SignInButton: UIButton!
+    @IBOutlet weak var signInButton: UIButton!
     
     var userLogin:Bool = true
     
@@ -40,14 +40,15 @@ class ViewController: UIViewController {
         userLogin = !userLogin //User has selected register button rather than sign in.
         
         //See what the user is doing
+        userLogin = !userLogin
         
         if userLogin {
             signInLabel.text = "Sign In"
-            SignInButton.setTitle("Sign In", for: .normal)
+            signInButton.setTitle("Sign In", for: .normal)
         }
         else {
             signInLabel.text = "Register"
-            SignInButton.setTitle("Register", for: .normal)
+            signInButton.setTitle("Register", for: .normal)
         }
     }
     
@@ -89,9 +90,7 @@ class ViewController: UIViewController {
                 
             }
         }
-        
-
-
+     
     }
 }
 
