@@ -8,6 +8,9 @@
 
 import UIKit
 import MapKit
+
+var searchRequestText:String = ""
+var annotationList: [MKPointAnnotation] = []
 class PlacesViewController: UIViewController, UISearchBarDelegate {
 
     
@@ -21,11 +24,10 @@ class PlacesViewController: UIViewController, UISearchBarDelegate {
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        
+
+        //Load Scene
         // ignore user while searching
         UIApplication.shared.beginIgnoringInteractionEvents()
-        
-        //Activity Indicatior
         let activityIndicator = UIActivityIndicatorView()
         activityIndicator.activityIndicatorViewStyle = UIActivityIndicatorViewStyle.gray
         activityIndicator.center = self.view.center
@@ -38,10 +40,12 @@ class PlacesViewController: UIViewController, UISearchBarDelegate {
         dismiss(animated: true, completion: nil)
         
         //Create the search request
-        
         let searchRequest = MKLocalSearchRequest()
         searchRequest.naturalLanguageQuery = searchBar.text
-        
+        listOfPlaces.append(searchBar.text!) //Add the search request to user's list of places
+        searchRequestText = searchBar.text!
+        print(listOfPlaces)
+
         //start search based on the user search request
         let activeSearch = MKLocalSearch(request: searchRequest)
         
@@ -59,6 +63,7 @@ class PlacesViewController: UIViewController, UISearchBarDelegate {
                 self.mapView.removeAnnotation(annotations)
                 */
                 //Getting data
+                
                 let latitude = response?.boundingRegion.center.latitude
                 let longitude = response?.boundingRegion.center.longitude
                 
@@ -67,28 +72,37 @@ class PlacesViewController: UIViewController, UISearchBarDelegate {
                 annotation.title = searchBar.text
                 annotation.coordinate = CLLocationCoordinate2DMake(latitude!, longitude!)
                 self.mapView.addAnnotation(annotation)
+                annotationList.append(annotation)
+                print(annotationList)
                 
                 //Zoom in on Search
                 let coordinate:CLLocationCoordinate2D = CLLocationCoordinate2DMake(latitude!, longitude!)
-                let span = MKCoordinateSpanMake(0.3, 0.3)
+                let span = MKCoordinateSpanMake(1, 1)
                 let region = MKCoordinateRegionMake(coordinate, span)
                 self.mapView.setRegion(region, animated: true)
             }
         }
     }
     
-    
     @IBAction func mapToMain(_ sender: UIButton) {
         //Go from map screen back to main screen
         self.performSegue(withIdentifier: "backToMain", sender: self)
-        
     }
-    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        var i = 1
+        var count = 0
+        
+        if i != 1000 {
+            for annotation in annotationList {
+                self.mapView.addAnnotation(annotationList[count])
+                count = count+1
+            }
+        i = 1000
+        }
+        
         // Do any additional setup after loading the view.
     }
 
@@ -96,16 +110,4 @@ class PlacesViewController: UIViewController, UISearchBarDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }

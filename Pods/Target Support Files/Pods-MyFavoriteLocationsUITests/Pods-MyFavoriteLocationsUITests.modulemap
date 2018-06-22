@@ -1,0 +1,6 @@
+framework module Pods_MyFavoriteLocationsUITests {
+  umbrella header "Pods-MyFavoriteLocationsUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
